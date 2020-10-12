@@ -23,7 +23,7 @@ QGPSparseData QGPSparseData::fromFile(std::string filename, bool * active){
     if (!file.eof()) {
         size_t numberOfEntries, numOfParticles;
         file >> numberOfEntries;
-        //file >> numOfParticles;
+        file >> numOfParticles;
         qgp.data.resize(numberOfEntries);
         qgp.index.resize(numberOfEntries);
 

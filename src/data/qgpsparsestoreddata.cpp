@@ -24,7 +24,7 @@ QGPData QGPSparseStoredData::fromFile(std::string filename, bool * active){
     if (!file.eof()) {
         size_t numberOfEntries, numOfParticles;
         file >> numberOfEntries;
-        //file >> numOfParticles;
+        file >> numOfParticles;
         size_t index;
         TIOStorageDataType value;
         for (size_t i = 0; i != numberOfEntries; ++i) {
