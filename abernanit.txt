@@ -1,0 +1,65 @@
+// QStandardPaths::HomeLocation
+### Network
+    normalization function for neurons
+    tanh backprop and feedforward
+    other neuron types
+
+
+## FC NN
+    mask for learning connections
+    implement / check normalization layer
+    implement / check dropout
+    regularization for weights
+
+## Conv NN
+    kernel/pooling types
+    scatter kernel
+    mirror kernel ( axis, position, bin)
+    mannifold
+    load learning kernels (t. ex. fix particle in center with spec momentum and surface bin)
+
+## Rec NNd indexmap
+pooling method (avg, euklidian, lp-norm)
+mask for
+## Layer
+    outputlayer
+    inputlayer
+    split and agglomeration layer
+    subnets
+    sparse connection layer
+    synapsis classes
+    active iterator?
+    batchnormalization use gliding mean / gliding variance
+
+### UI
+    raw file conversion, stats of conversion
+    training on whole dataset
+    dynamically configurate topology for net
+
+### Datastructure
+    QGP templated datatype ( double, short, float, )
+    squeeze dimension
+    binary files for nn
+    load topology with rand weights
+    searialize topology only
+    non const dimensiondiscription GS_GRIDSIZES
+
+### Training
+    odd batchsize
+    training with single files
+    Batch load randomly
+
+### Validation
+    training filter for high loss / bad recognitions
+    odd batchsize
+    training with single files
+    save net with >X% validation (X = 95)
+    classification matrix
+
+
+
+### Conversion
+    dimensiondescription for conversion
+    conversion stats to file
+    overall to file
+    max values depending on polar

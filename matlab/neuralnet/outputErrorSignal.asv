@@ -1,0 +1,3 @@
+function v = outputErrorSignal(w, target)
+
+end
