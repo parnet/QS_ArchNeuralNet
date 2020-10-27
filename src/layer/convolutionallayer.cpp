@@ -246,15 +246,27 @@ void ConvolutionalLayer::calcKernelChanges(size_t bz){
 
 void ConvolutionalLayer::calcBiasChanges(size_t bz){
     if(desc.learnbias){
-    auto &rightErrorSignal = nextLayer->getLeftErrorSignal(bz);
-    for (size_t och = 0; och < outChannel; och++) {
-               auto &bias = filter[och].bias;
-               number *cPoolingErrorSignal = &rightErrorSignal[och * szOutput];
 
-               for (size_t i = 0; i < szOutput; i++) {
-                   bias.gradient += cPoolingErrorSignal[i];
+        auto &rightErrorSignal = nextLayer->getLeftErrorSignal(bz);
+        auto &idxRightErrorSignal = this->getActiveRightErrorSignal(bz);
+
+        if(idxRightErrorSignal.size() == 0){ // dense errorsignal
+            for (size_t och = 0; och < outChannel; och++) {
+                   auto &bias = filter[och].bias;
+                   number *cPoolingErrorSignal = &rightErrorSignal[och * szOutput];
+
+                   for (size_t i = 0; i < szOutput; i++) {
+                       bias.gradient += cPoolingErrorSignal[i];
+                   }
                }
-           }
+         } else {
+            for (size_t r = 0; r < idxRightErrorSignal.size(); r++){
+                size_t och = idxRightErrorSignal[r] / szOutput;
+                auto &bias = filter[och].bias;
+                bias.gradient += rightErrorSignal[r];
+
+            }
+        }
     }
 }
 
