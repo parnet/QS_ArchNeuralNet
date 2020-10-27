@@ -1,7 +1,7 @@
 #ifndef ENVIRONMENT_H
 #define ENVIRONMENT_H
 
-#include <omp.h>
+// #include <omp.h>
 #include <limits>
 #include <math.h>
 #include <iostream>

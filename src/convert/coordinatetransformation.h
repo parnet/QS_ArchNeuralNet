@@ -40,15 +40,15 @@ public:
     InclinationTransformation inclinationIdxProvidor;
 
     SphericalTransformation(Module * module){
-        momentumIdxProvider = LogTransformation(module->fileDimension.gridsize[QGPdim::Momentum], 11.0);
+        momentumIdxProvider = LogTransformation(module->fileDimension.gridsize[QGPdim::Momentum], 11.0); // 11 is maximal momentum which should be used
         polarIdxProvider = PolarTransformation(module->fileDimension.gridsize[QGPdim::Polar]);
         inclinationIdxProvidor = InclinationTransformation(module->fileDimension.gridsize[QGPdim::Inclination]);
     }
 
     void apply(number v1, number v2, number v3, size_t &idxMomentum, size_t &idxPolar, size_t &idxInclination){
-        number p_abs_val = sqrt(v1 * v1 + v2 * v2 + v3 * v3); // [ 0, \infinity )
-        number p_inc = atan2(v2, v1); // [-pi, pi]
-        number p_pol = acos(v3 / p_abs_val); // [0, pi)
+        number p_abs_val = sqrt(v1 * v1 + v2 * v2 + v3 * v3); // [ 0, \infinity ) or [0, max Momentum]
+        number p_inc = atan2(v2, v1); // [-pi, pi]  // todo inclination 0,pi
+        number p_pol = acos(v3 / p_abs_val); // [0, pi)    //todo notation wrong   azimut [-pi, pi] , [0, 2pi]
 
         idxMomentum = momentumIdxProvider.toIndex(p_abs_val);
         idxPolar = polarIdxProvider.toIndex(p_pol );

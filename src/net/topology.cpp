@@ -16,6 +16,142 @@ void Topology::addDescription(VariantLayerDescriptions desc){
 
 Topology::~Topology(){}
 
+
+Topology Topology::AGI_Topology(){ // Artemy, Grigory, Ivan
+    Topology top;
+
+    std::vector<size_t> dimInput = {20,20,20,28};
+
+    InputLayerDescription descInput;
+    descInput.dimension = Dimension(dimInput); // todo check Dimension(4,20,20,20,28)
+    descInput.size = descInput.dimension.size();
+    top.addDescription(descInput);
+
+
+    ConvolutionLayerDescription descConvFirst;
+    descConvFirst.dimKernel = {3,3,3};
+    descConvFirst.scatter = {1,1,1};
+
+    descConvFirst.offset = {(descConvFirst.dimKernel[0] -1)/2,
+                       (descConvFirst.dimKernel[1] -1)/2,
+                       (descConvFirst.dimKernel[2] -1)/2};
+
+    descConvFirst.leftPadding = {PaddingType::Zerofill, PaddingType::Zerofill, PaddingType::Zerofill};
+    descConvFirst.rightPadding = {PaddingType::Zerofill, PaddingType::Zerofill, PaddingType::Zerofill};
+
+    descConvFirst.inChannel = 28;
+    descConvFirst.outChannel = 32;
+    descConvFirst.dimInput = {GS_INCLINATION,GS_POLAR, GS_MOMENTUM};
+
+    descConvFirst.lower = {0,0,0};
+    descConvFirst.upper = {GS_INCLINATION,GS_POLAR, GS_MOMENTUM};
+
+    descConvFirst.learnbias = true;
+    descConvFirst.learnkernel = true;
+
+    descConvFirst.dimOutput = {GS_INCLINATION,GS_POLAR, GS_MOMENTUM}; // depending size
+    top.addDescription(descConvFirst);
+
+
+    ActivationLayerDescription descActivationConv;
+    descActivationConv.dropout = 0.0; // todo dropout ?
+    descActivationConv.usesbias = false;
+    descActivationConv.activation = NeuronType::LeakyReLU;
+    descActivationConv.numberOfNeurons = descConvFirst.outChannel*descConvFirst.dimOutput[2]*descConvFirst.dimOutput[0]*descConvFirst.dimOutput[1];
+    top.addDescription(descActivationConv);
+
+
+    MaxPoolingLayerDescription descPooling;
+    descPooling.channel = descConvFirst.outChannel;
+    descPooling.dimInput = descConvFirst.dimOutput;
+    descPooling.stride = {2,2,2};
+    descPooling.dimOutput = {descPooling.dimInput[0] / descPooling.stride[0],
+                             descPooling.dimInput[1] / descPooling.stride[1],
+                            descPooling.dimInput[2] / descPooling.stride[2]};
+    top.addDescription(descPooling);
+
+
+
+
+    ConvolutionLayerDescription descConvSecond;
+    descConvSecond.dimKernel = {3,3,3};
+    descConvSecond.scatter = {1,1,1};
+
+    descConvSecond.offset = {(descConvSecond.dimKernel[0] -1)/2,
+                       (descConvSecond.dimKernel[1] -1)/2,
+                       (descConvSecond.dimKernel[2] -1)/2};
+
+    descConvSecond.leftPadding = {PaddingType::Zerofill, PaddingType::Zerofill, PaddingType::Zerofill};
+    descConvSecond.rightPadding = {PaddingType::Zerofill, PaddingType::Zerofill, PaddingType::Zerofill};
+
+    descConvSecond.inChannel = 32;
+    descConvSecond.outChannel = 64;
+    descConvSecond.dimInput = descPooling.dimOutput;
+
+    descConvSecond.lower = {0,0,0};
+    descConvSecond.upper = descConvSecond.dimInput;
+    descConvSecond.learnbias = true;
+
+    descConvSecond.dimOutput = descConvSecond.dimInput; // depnding size
+    top.addDescription(descConvSecond);
+
+
+    ActivationLayerDescription descActivationConvSecond;
+    descActivationConvSecond.dropout = 0.0;
+    descActivationConvSecond.usesbias = false;
+    descActivationConvSecond.activation = NeuronType::LeakyReLU;
+    descActivationConvSecond.numberOfNeurons = descConvSecond.outChannel*descConvSecond.dimOutput[2]*descConvSecond.dimOutput[0]*descConvSecond.dimOutput[1];
+    top.addDescription(descActivationConvSecond);
+
+
+    MaxPoolingLayerDescription descPoolingSecond;
+    descPoolingSecond.channel = descConvSecond.outChannel;
+    descPoolingSecond.dimInput = descConvSecond.dimOutput;
+    descPoolingSecond.stride = {2,2,2};
+    descPoolingSecond.dimOutput = {descPoolingSecond.dimInput[0] / descPoolingSecond.stride[0],
+                             descPoolingSecond.dimInput[1] / descPoolingSecond.stride[1],
+                            descPoolingSecond.dimInput[2] / descPoolingSecond.stride[2]};
+    top.addDescription(descPoolingSecond);
+
+
+    FullyConnectedDescription descConnection;
+    descConnection.szLeft = 8000;
+    descConnection.szRight = 64;
+    top.addDescription(descConnection);
+
+    ActivationLayerDescription descActivation;
+    descActivation.dropout = 0.0; // todo dropout of 0.5
+    descActivation.usesbias = true;
+    descActivation.activation = NeuronType::LeakyReLU;
+    descActivation.numberOfNeurons = 64;
+    top.addDescription(descActivation);
+
+    FullyConnectedDescription descConnectionLast;
+    descConnectionLast.szLeft = 64;
+    descConnectionLast.szRight = 2;
+    top.addDescription(descConnectionLast);
+
+    ActivationLayerDescription descActivationLast;
+    descActivationLast.dropout = 0.0;
+    descActivationLast.usesbias = false;
+    descActivationLast.activation = NeuronType::Softmax;
+    descActivationLast.numberOfNeurons = 2;
+    top.addDescription(descActivationLast);
+
+
+    OutputLayerDescription descOutput;
+    top.addDescription(descOutput);
+
+    return top;
+}
+
+// LinearSeperable() 224000 -> 2   (80%)
+// SingleHiddenLayer_64() 224000 -> 64 -> 2
+// DoubleHiddenLayer_8_8() 224000 -> 8 -> 8 -> 2
+
+
+
+
 Topology Topology::buildConv(){
     Topology top;
 
@@ -95,25 +231,27 @@ Topology Topology::buildConv(){
 }
 
 Topology Topology::defaultTopology(){
-    return Topology::buildConv();
+    return Topology::linearSeperable();
 }
 
 Topology Topology::experimentalTopology()
 {
-    // todo
-    return Topology::defaultTopology();
+    return Topology::defaultNoneHidden();
+    //return Topology::defaultTopology();
     Topology top;
 
     InputLayerDescription descInput;
     top.addDescription(descInput);
 
     ConvolutionLayerDescription descConv;
-    descConv.dimKernel = {3,3,3};
+    descConv.dimKernel = {3,3,5};
     descConv.offset = {(descConv.dimKernel[1] -1)/2, (descConv.dimKernel[1] -1)/2,(descConv.dimKernel[2] -1)/2};
     descConv.inChannel = 28;
-    descConv.outChannel = 4;
+    descConv.outChannel = 8;
     descConv.dimInput = {GS_MOMENTUM, GS_POLAR, GS_INCLINATION};
     descConv.lower = {0,0,0};
+    descConv.leftPadding = {PaddingType::Zerofill, PaddingType::Zerofill, PaddingType::Torus};
+    descConv.rightPadding = {PaddingType::Zerofill, PaddingType::Zerofill, PaddingType::Torus};
     descConv.upper = descConv.dimInput;
     descConv.dimOutput = descConv.dimInput;
     top.addDescription(descConv);
@@ -166,30 +304,58 @@ Topology Topology::defaultNoneHidden(){
     return top;
 }
 
-Topology Topology::defaultSingleHidden(){
+Topology Topology::linearSeperable(){
     Topology top;
 
     InputLayerDescription descInput;
-    std::vector<size_t> dimInput = {20,20,20,28};
+    std::vector<size_t> dimInput = {20,20,20,28}; // todo replace by dimension
     descInput.dimension = Dimension(dimInput);
     descInput.size = descInput.dimension.size();
     top.addDescription(descInput);
 
     FullyConnectedDescription descHiddenConnection;
     descHiddenConnection.szLeft = 224000;
-    descHiddenConnection.szRight = 64;
+    descHiddenConnection.szRight = 2;
     top.addDescription(descHiddenConnection);
 
-    ActivationLayerDescription descHiddenActivation;
-    descHiddenActivation.dropout = 0.5;
-    descHiddenActivation.usesbias = true;
-    descHiddenActivation.activation = NeuronType::LeakyReLU;
-    descHiddenActivation.numberOfNeurons = 64;
-    top.addDescription(descHiddenActivation);
+    ActivationLayerDescription descOutputActivation;
+    descOutputActivation.dropout = 0.0;
+    descOutputActivation.usesbias = false;
+    descOutputActivation.activation = NeuronType::Softmax;
+    descOutputActivation.numberOfNeurons = 2;
+    top.addDescription(descOutputActivation);
 
+    OutputLayerDescription descOutput;
+    top.addDescription(descOutput);
+
+
+    return top;
+}
+
+Topology Topology::singleHidden_64()
+{
+    Topology top;
+
+    std::vector<size_t> dimInput = {20,20,20,28};
+    InputLayerDescription descInput;
+    descInput.dimension = Dimension(dimInput);
+    descInput.size = descInput.dimension.size();
+    top.addDescription(descInput);
+
+    FullyConnectedDescription descHiddenConnectionA;
+    descHiddenConnectionA.szLeft = 224000;
+    descHiddenConnectionA.szRight = 64;
+    top.addDescription(descHiddenConnectionA);
+
+    ActivationLayerDescription descHiddenActivationA;
+    descHiddenActivationA.dropout = 0.5;
+    descHiddenActivationA.usesbias = true;
+    descHiddenActivationA.activation = NeuronType::LeakyReLU;
+    descHiddenActivationA.numberOfNeurons = descHiddenConnectionA.szRight;
+    top.addDescription(descHiddenActivationA);
 
     FullyConnectedDescription descConnection;
-    descConnection.szLeft = 64;
+    descConnection.szLeft = descHiddenActivationA.numberOfNeurons;
     descConnection.szRight = 2;
     top.addDescription(descConnection);
 
@@ -202,12 +368,10 @@ Topology Topology::defaultSingleHidden(){
 
     OutputLayerDescription descOutput;
     top.addDescription(descOutput);
-
-
     return top;
 }
 
-Topology Topology::defaultDoubleHidden(){
+Topology Topology::doubleHidden_64_64(){
     Topology top;
 
     std::vector<size_t> dimInput = {20,20,20,28};
@@ -218,30 +382,30 @@ Topology Topology::defaultDoubleHidden(){
 
     FullyConnectedDescription descHiddenConnectionA;
     descHiddenConnectionA.szLeft = 224000;
-    descHiddenConnectionA.szRight = 8;
+    descHiddenConnectionA.szRight = 64;
     top.addDescription(descHiddenConnectionA);
 
     ActivationLayerDescription descHiddenActivationA;
     descHiddenActivationA.dropout = 0.5;
     descHiddenActivationA.usesbias = true;
     descHiddenActivationA.activation = NeuronType::LeakyReLU;
-    descHiddenActivationA.numberOfNeurons = 8;
+    descHiddenActivationA.numberOfNeurons = descHiddenConnectionA.szRight;
     top.addDescription(descHiddenActivationA);
 
     FullyConnectedDescription descHiddenConnectionB;
-    descHiddenConnectionB.szLeft = 8;
-    descHiddenConnectionB.szRight = 8;
+    descHiddenConnectionB.szLeft = descHiddenActivationA.numberOfNeurons;
+    descHiddenConnectionB.szRight = 64;
     top.addDescription(descHiddenConnectionB);
 
     ActivationLayerDescription descHiddenActivationB;
-    descHiddenActivationB.dropout = 0.3;
-    descHiddenActivationB.usesbias = false;
+    descHiddenActivationB.dropout = 0.5;
+    descHiddenActivationB.usesbias = true;
     descHiddenActivationB.activation = NeuronType::LeakyReLU;
-    descHiddenActivationB.numberOfNeurons = 8;
+    descHiddenActivationB.numberOfNeurons = descHiddenConnectionB.szRight;
     top.addDescription(descHiddenActivationA);
 
     FullyConnectedDescription descConnection;
-    descConnection.szLeft = 8;
+    descConnection.szLeft = descHiddenActivationB.numberOfNeurons;
     descConnection.szRight = 2;
     top.addDescription(descConnection);
 
@@ -380,27 +544,30 @@ Topology Topology::defaultConvolutional(){
 Topology Topology::getPredefined(size_t index)
 {
     Topology descTopology;
-#ifndef EXPERIMENTAL
-    index = index + 1;
-#endif
     switch (index) {
         case 0:
-            descTopology = Topology::experimentalTopology();
+            sDebug() << "0 fc expected linear seperable\n";
+            descTopology = Topology::linearSeperable();
               break;
         case 1:
-            descTopology = Topology::defaultTopology();
+            sDebug() << "0 fc single singleHidden_64\n";
+             descTopology = Topology::singleHidden_64();
             break;
         case 2:
-            descTopology = Topology::defaultSingleHidden();
+            sDebug() << "0 fc doubleHidden_8_8\n";
+            descTopology = Topology::doubleHidden_64_64();
             break;
         case 3:
-            descTopology = Topology::defaultDoubleHidden();
+            sDebug() << "0 fc AGI\n";
+            descTopology = Topology::AGI_Topology();
             break;
         case 4: // CNN
-            descTopology = Topology::defaultConvolutional();
+            sDebug() << "0 fc expected\n";
+            descTopology = Topology::defaultNoneHidden();
             break;
         default:
-            descTopology = Topology::defaultTopology();
+            sDebug() << "0 fc expected\n";
+            descTopology = Topology::defaultNoneHidden();
         break;
 }
     return descTopology;

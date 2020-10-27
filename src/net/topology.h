@@ -31,13 +31,25 @@ public:
 
     static Topology defaultNoneHidden();
 
-    static Topology defaultSingleHidden();
 
-    static Topology defaultDoubleHidden();
+
 
     static Topology defaultConvolutional();
 
     static Topology getPredefined(size_t index);
+
+
+
+
+    static Topology AGI_Topology();
+
+    static Topology linearSeperable();
+
+    static Topology singleHidden_64();
+
+    static Topology doubleHidden_64_64();
+
+
 };
 
 #endif // TOPOLOGY_H

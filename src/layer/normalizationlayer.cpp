@@ -32,7 +32,7 @@ void NormalizationLayer::prepare(){
 
 void NormalizationLayer::feedforward(){
     std::vector<size_t> activeIndex; // todo
-    activeIndex.resize(2);
+    activeIndex.resize(2); // this 2 is defnitly sus
     for(size_t i = 0; i < 2; i++){
         activeIndex[i] = i;
     }

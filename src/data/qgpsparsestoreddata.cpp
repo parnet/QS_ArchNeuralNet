@@ -23,13 +23,13 @@ QGPData QGPSparseStoredData::fromFile(std::string filename, bool * active){
 
     if (!file.eof()) {
         size_t numberOfEntries, numOfParticles;
-        file >> numberOfEntries;
-        file >> numOfParticles;
         size_t index;
         TIOStorageDataType value;
         for (size_t i = 0; i != numberOfEntries; ++i) {
             file >> index;
             file >> value;
+            file >> numberOfEntries;
+            file >> numOfParticles;
             qgp.data[index] = TInternalDataType(value);
             if (active != nullptr) {
                 active[index] = true;

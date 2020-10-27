@@ -24,8 +24,8 @@ void QGPRawData::convert(Module * module){
 
 
     for(unsigned char c = 0; c < 2*this->nFilesPerClass; ++c){
-        unsigned char qgp = c % 2;
-        unsigned char curFile = c / 2;
+        unsigned char qgp = c % 2; // set class qgp / nqgp
+        unsigned char curFile = c / 2; // select file
 
         std::stringstream sfilename;
         sfilename  <<inFilepath << module->filename.subdir[qgp] << inputfilename << std::setfill('0') << std::setw(this->inputzerofill) << curFile + 1 << suffix;
@@ -35,7 +35,7 @@ void QGPRawData::convert(Module * module){
             qDebug() << "inputfile error";
             return;
         }
-        for (size_t curEventOfFile = 0; curEventOfFile < eventsPerFile; ++curEventOfFile) {
+        for (size_t curEventOfFile = 0; curEventOfFile < eventsPerFile; ++curEventOfFile) { // iterate over events in file
             QGPSparseStoredData data;
             data.classification = qgp;
 
@@ -53,7 +53,7 @@ void QGPRawData::convert(Module * module){
             const char ch = '\n';
             ifile.getline(buffer, 0, ch);
             //qDebug() << nOfParticles << " particles found";
-            for (int iP = 0; iP < nOfParticles; iP++) {
+            for (int iP = 0; iP < nOfParticles; iP++) { // read in one line for a single particle
                 ifile.getline(buffer, 999, ch);
                 std::stringstream sstream;
                 sstream << buffer;
@@ -108,7 +108,7 @@ void QGPRawData::convert(Module * module){
                     qDebug() << "Inclination Index" << idxInclination;
                 }
 
-                size_t idx = index(idxInclination,idxPolar,idxMomentum,idxParticle);
+                size_t idx = index(idxInclination,idxPolar,idxMomentum,idxParticle); // 3d koordinate system to 1d flatted coordinates
                 if(idx >= module->fileDimension.size()){
                     qDebug() << "Index too big" << idx;
                 }

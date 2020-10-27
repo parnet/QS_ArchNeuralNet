@@ -13,12 +13,12 @@
 
 int devconvert(int argc, char*argv[]){
     Module * module = new Module();
-    //module->fileDimension = Dimension(4,20,20,20,14);
+    //module->fileDimension = Dimension(4,20,20,20,14); // Azimut (-pi, pi) , Inclination ( 0, pi), momentum, particlecount
     module->filename.path = "M:/sphr_28_20_20_20/";
 
     QGPRawData qgpr{};
     qgpr.nFilesPerClass = 5;
-    qgpr.inFilepath = "D:/Projects/QGP_dataset_raw/";
+    qgpr.inFilepath = "Q:/QS_NeuralNet/data_raw/31.2/";
 
     qgpr.convert(module);
     exit(-20);
@@ -86,9 +86,8 @@ int devfc(int argc, char *argv[]){
 
 int main(int argc, char *argv[]) {
     sDebug() << "num of args: " << argc << qSetRealNumberPrecision(2);
-    sDebug() << "Max Thread " << omp_get_max_threads();
-    RandomDevice::setSeed(1024);
-    qInstallMessageHandler(&loggingFile);
+    RandomDevice::setSeed(1024);  // todo delete seed or notice user
+    //qInstallMessageHandler(&loggingFile);
     //__test();
     // devconvert(argc,argv);
     // devmain(argc, argv);

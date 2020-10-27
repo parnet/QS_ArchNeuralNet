@@ -7,6 +7,15 @@
 /**
  * @brief The QGPSparseData class is a sparse implementation of the QGPData where the data only consists out of non zero entries
  */
+
+
+
+/**
+ * @brief The QGPSparseData class
+ * first entry of file number of non zero entry
+ * second entry number of particles
+ * sequence of tuples (index, number of particle for this index)
+ */
 class QGPSparseData{
 public:
     typedef unsigned short TIOStorageDataType;
