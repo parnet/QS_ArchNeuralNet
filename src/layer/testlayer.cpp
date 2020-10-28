@@ -130,7 +130,7 @@ bool TestLayer::controlErrorSignal(){
             // check values
             for(size_t j = 0; j < value.size(); j++){
                 if(fabs(value[j] - expected[j]) > 1e-5){
-                    sDebug() << "dist("<<value[j] << ","<< expected[j]<<") too big for ErrorSignal @"<<i <<" pos @" << j;
+                    //sDebug() << "dist("<<value[j] << ","<< expected[j]<<") too big for ErrorSignal @"<<i <<" pos @" << j;
                     passed = false;
                 }
             }

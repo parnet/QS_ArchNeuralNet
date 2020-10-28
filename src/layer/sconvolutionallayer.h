@@ -17,7 +17,7 @@ public:
     BiasUpdater::Variable bias;
     KernelUpdater kernelUpdater;
     BiasUpdater biasUpdater;
-    number learningrateKernel = 0.001; // todo move to Updater
+    number learningrateKernel = 0.001; // todo move to Updater // todo fix value
     number learningRateBias = 0.0001; // todo move to Updater
 };
 

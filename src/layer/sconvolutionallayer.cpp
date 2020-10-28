@@ -392,10 +392,9 @@ void SConvolutionalLayer::calcBiasChanges(size_t bz){
                }
          } else {
             for (size_t r = 0; r < idxRightErrorSignal.size(); r++){
-                size_t och = idxRightErrorSignal[r] / szOutput;
+                size_t och = idxRightErrorSignal[r] / szInput;
                 auto &bias = filter[och].bias;
                 bias.gradient += rightErrorSignal[r];
-
             }
         }
     }
@@ -442,7 +441,7 @@ void SConvolutionalLayer::calcInputChanges(size_t bz){
             for(size_t r = 0; r < idxRightErrorSignal.size(); r++){ // todo swap och (r) and ch ?
                 size_t idxR = idxRightErrorSignal[r];
                 size_t idxC = idxR % szInput;
-                size_t orch = idxR / szInput;
+                size_t orch = idxR / szInput; // todo check if output or input
 
                 for (size_t k = 0; k < szKernel; ++k) {
                     if (indexmap[idxC][k] == szInput) {

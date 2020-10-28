@@ -13,7 +13,7 @@ public:
 public:
     static constexpr short numberOfClassification = 2;
 
-    static constexpr size_t size = GS_PARTICLES*GS_MOMENTUM*GS_POLAR*GS_INCLINATION;
+    static constexpr size_t size = GS_PARTICLES*GS_MOMENTUM*GS_INCLINATION*GS_AZIMUT;
 
     TClassificationType classification;
 

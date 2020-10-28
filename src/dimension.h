@@ -7,7 +7,7 @@
 class Dimension {
 public:
     size_t dim = 4;
-    std::vector<size_t> gridsize = {GS_INCLINATION,GS_POLAR,GS_MOMENTUM,GS_PARTICLES};
+    std::vector<size_t> gridsize = {GS_AZIMUT,GS_INCLINATION,GS_MOMENTUM,GS_PARTICLES};
 
     Dimension() = default;
 

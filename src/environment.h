@@ -35,8 +35,8 @@
  * ********************************************************************************************* */
 #define GS_PARTICLES 28
 #define GS_MOMENTUM 20
-#define GS_POLAR 20
 #define GS_INCLINATION 20
+#define GS_AZIMUT 20
 
 #define EXPERIMENTAL 1
 #define RAND_FIXED 0

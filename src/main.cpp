@@ -89,6 +89,7 @@ int main(int argc, char *argv[]) {
     RandomDevice::setSeed(1024);  // todo delete seed or notice user
     //qInstallMessageHandler(&loggingFile);
     //__test();
+    // exit(-1);
     // devconvert(argc,argv);
     // devmain(argc, argv);
     // devfc(argc, argv);

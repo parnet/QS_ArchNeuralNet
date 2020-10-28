@@ -14,8 +14,7 @@ int __TestMaxPoolingLayer::all(){
     return failed;
 }
 
-bool __TestMaxPoolingLayer::cycle_dd_dd()
-{
+bool __TestMaxPoolingLayer::cycle_dd_dd(){
     RandomDevice::setSeed(1024);
     TestLayer * input = new TestLayer(nullptr);
     input->setRightVectorSize(64);

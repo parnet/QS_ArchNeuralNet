@@ -33,23 +33,24 @@ Topology Topology::AGI_Topology(){ // Artemy, Grigory, Ivan
     descConvFirst.scatter = {1,1,1};
 
     descConvFirst.offset = {(descConvFirst.dimKernel[0] -1)/2,
-                       (descConvFirst.dimKernel[1] -1)/2,
-                       (descConvFirst.dimKernel[2] -1)/2};
+                            (descConvFirst.dimKernel[1] -1)/2,
+                            (descConvFirst.dimKernel[2] -1)/2
+                           };
 
     descConvFirst.leftPadding = {PaddingType::Zerofill, PaddingType::Zerofill, PaddingType::Zerofill};
     descConvFirst.rightPadding = {PaddingType::Zerofill, PaddingType::Zerofill, PaddingType::Zerofill};
 
     descConvFirst.inChannel = 28;
     descConvFirst.outChannel = 32;
-    descConvFirst.dimInput = {GS_INCLINATION,GS_POLAR, GS_MOMENTUM};
+    descConvFirst.dimInput = {GS_AZIMUT,GS_INCLINATION, GS_MOMENTUM};
 
     descConvFirst.lower = {0,0,0};
-    descConvFirst.upper = {GS_INCLINATION,GS_POLAR, GS_MOMENTUM};
+    descConvFirst.upper = {GS_AZIMUT,GS_INCLINATION, GS_MOMENTUM};
 
     descConvFirst.learnbias = true;
     descConvFirst.learnkernel = true;
 
-    descConvFirst.dimOutput = {GS_INCLINATION,GS_POLAR, GS_MOMENTUM}; // depending size
+    descConvFirst.dimOutput = {GS_AZIMUT,GS_INCLINATION, GS_MOMENTUM}; // depending size
     top.addDescription(descConvFirst);
 
 
@@ -91,6 +92,7 @@ Topology Topology::AGI_Topology(){ // Artemy, Grigory, Ivan
     descConvSecond.lower = {0,0,0};
     descConvSecond.upper = descConvSecond.dimInput;
     descConvSecond.learnbias = true;
+    descConvSecond.learnkernel = true;
 
     descConvSecond.dimOutput = descConvSecond.dimInput; // depnding size
     top.addDescription(descConvSecond);
@@ -120,14 +122,14 @@ Topology Topology::AGI_Topology(){ // Artemy, Grigory, Ivan
     top.addDescription(descConnection);
 
     ActivationLayerDescription descActivation;
-    descActivation.dropout = 0.0; // todo dropout of 0.5
+    descActivation.dropout = 0.5; // todo dropout of 0.5
     descActivation.usesbias = true;
     descActivation.activation = NeuronType::LeakyReLU;
     descActivation.numberOfNeurons = 64;
     top.addDescription(descActivation);
 
     FullyConnectedDescription descConnectionLast;
-    descConnectionLast.szLeft = 64;
+    descConnectionLast.szLeft = 8000;
     descConnectionLast.szRight = 2;
     top.addDescription(descConnectionLast);
 
@@ -173,10 +175,10 @@ Topology Topology::buildConv(){
 
     descConv.inChannel = 28;
     descConv.outChannel = 4;
-    descConv.dimInput = {GS_INCLINATION,GS_POLAR, GS_MOMENTUM};
+    descConv.dimInput = {GS_AZIMUT,GS_INCLINATION, GS_MOMENTUM};
     descConv.lower = {0,0,0};
-    descConv.upper = {GS_INCLINATION,GS_POLAR, GS_MOMENTUM};
-    descConv.dimOutput = {GS_INCLINATION,GS_POLAR, GS_MOMENTUM};
+    descConv.upper = {GS_AZIMUT,GS_INCLINATION, GS_MOMENTUM};
+    descConv.dimOutput = {GS_AZIMUT,GS_INCLINATION, GS_MOMENTUM};
     top.addDescription(descConv);
 
     /*ConvolutionLayerDescription descConv;
@@ -248,7 +250,7 @@ Topology Topology::experimentalTopology()
     descConv.offset = {(descConv.dimKernel[1] -1)/2, (descConv.dimKernel[1] -1)/2,(descConv.dimKernel[2] -1)/2};
     descConv.inChannel = 28;
     descConv.outChannel = 8;
-    descConv.dimInput = {GS_MOMENTUM, GS_POLAR, GS_INCLINATION};
+    descConv.dimInput = {GS_MOMENTUM, GS_INCLINATION, GS_AZIMUT};
     descConv.lower = {0,0,0};
     descConv.leftPadding = {PaddingType::Zerofill, PaddingType::Zerofill, PaddingType::Torus};
     descConv.rightPadding = {PaddingType::Zerofill, PaddingType::Zerofill, PaddingType::Torus};
