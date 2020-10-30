@@ -13,6 +13,7 @@ ChooseWidget::ChooseWidget(QWidget *parent) :
     connect(this->ui->btn_newTraining,SIGNAL(clicked()), main, SLOT(changeTabTraining()));
     connect(this->ui->btn_newConversion,SIGNAL(clicked()), main, SLOT(changeTabConvert()));
     connect(this->ui->btn_newValidation,SIGNAL(clicked()), main, SLOT(changeTabValidation()));
+    connect(this->ui->btn_newPlots, SIGNAL(clicked()), main, SLOT(changeTabPlotting()));
     }
 
 }
@@ -30,6 +31,7 @@ void ChooseWidget::setParent(QWidget *parent)
         connect(this->ui->btn_newTraining,SIGNAL(clicked()), main, SLOT(changeTabTraining()));
         connect(this->ui->btn_newConversion,SIGNAL(clicked()), main, SLOT(changeTabConvert()));
         connect(this->ui->btn_newValidation,SIGNAL(clicked()), main, SLOT(changeTabValidation()));
+        connect(this->ui->btn_newPlots,SIGNAL(clicked()), main, SLOT(changeTabPlotting()));
     }
     QWidget::setParent(parent);
 }

@@ -38,6 +38,8 @@ public slots:
 
     void saveNeuralNet();
 
+    void exportAccuracyData();
+
     void setTopology(int number);
 
     void loadDataset();

@@ -88,3 +88,13 @@ void MainWindow::changeTabConvert()
     current->deleteLater();
     this->ui->tabWidget->setCurrentIndex(cI);
 }
+
+void MainWindow::changeTabPlotting()
+{
+    auto cI = this->ui->tabWidget->currentIndex();
+    auto current = this->ui->tabWidget->widget(cI);
+    this->ui->tabWidget->removeTab(cI);
+    this->ui->tabWidget->insertTab(cI,new PlotWidget(),"Plotting"); // todo number
+    current->deleteLater();
+    this->ui->tabWidget->setCurrentIndex(cI);
+}

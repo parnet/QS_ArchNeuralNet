@@ -92,6 +92,49 @@ void TrainingWidget::saveNeuralNet()
     }
 }
 
+void TrainingWidget::exportAccuracyData(){
+    /**
+      * Exports the graph data of the accuracy graph into a text file with suffix .nnp (neural network plot)
+      * The exported file consists of:
+      * first line: number of epochs
+      * second line: total train data for each epoch
+      * third line: correct train data for each epoch
+      * fourth line: total validation data for each epoch
+      * fifth line: correct validation data for each epoch
+      * eof.
+      **/
+    if(this->process == nullptr){
+    QFileDialog *dialog = new QFileDialog();
+    dialog->setDefaultSuffix("nnp");
+    QString fileName = dialog->getSaveFileName(this, tr("Export Accuracy Data"), "", tr("NeuralNetPlot (*.nnp);;All Files (*)"));
+    std::vector<size_t> totalTrain = this->supervisor->statTotalTraining;
+    std::vector<size_t> corrTrain = this->supervisor->statCorrectTraining;
+    std::vector<size_t> totalVali = this->supervisor->statTotalValidation;
+    std::vector<size_t> corrVali = this->supervisor->statCorrectValidation;
+
+    std::ofstream file(fileName.toStdString().c_str());
+    file << std::setprecision(WRITE_PRECISION);
+    file << totalTrain.size() << std::endl;
+    for(size_t i = 0; i < corrTrain.size(); i++){
+        file << totalTrain[i] << " ";
+    }
+    file << std::endl;
+    for(size_t i = 0; i < corrTrain.size(); i++){
+        file << corrTrain[i] << " ";
+    }
+    file << std::endl;
+    for(size_t i = 0; i < corrTrain.size(); i++){
+        file << totalVali[i] << " ";
+    }
+    file << std::endl;
+    for(size_t i = 0; i < corrVali.size(); i++){
+        file << corrVali[i] << " ";
+    }
+    file.close();
+    delete dialog;
+    }
+}
+
 void TrainingWidget::setTopology(int number)
 {
     qDebug() << "using seed (1024);";
