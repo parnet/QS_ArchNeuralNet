@@ -107,6 +107,7 @@ SOURCES += \
     src/ui/topologywidget.cpp \
     src/ui/trainingwidget.cpp \
     src/ui/validationwidget.cpp \
+    src/ui/plotwidget.cpp \
     test/layer/testconvolutionlayer.cpp \
     test/layer/testfullyconnectedlayer.cpp \
     test/layer/testmaxpoolinglayer.cpp \
@@ -200,6 +201,7 @@ HEADERS += \
     src/ui/topologywidget.h \
     src/ui/trainingwidget.h \
     src/ui/validationwidget.h \
+    src/ui/plotwidget.h \
     src/update/weightadamoptimization.h \
     src/update/weightgradientdescent.h \
     src/update/weightmomentumofinertia.h \
@@ -214,6 +216,7 @@ HEADERS += \
  FORMS += \
     src/ui/choosewidget.ui \
     src/ui/convertwidget.ui \
+    src/ui/plotwidget.ui \
     src/ui/mainwindow.ui \
     src/ui/topologywidget.ui \
     src/ui/trainingwidget.ui \
