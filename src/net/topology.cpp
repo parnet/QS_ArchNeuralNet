@@ -129,7 +129,7 @@ Topology Topology::AGI_Topology(){ // Artemy, Grigory, Ivan
     top.addDescription(descActivation);
 
     FullyConnectedDescription descConnectionLast;
-    descConnectionLast.szLeft = 8000;
+    descConnectionLast.szLeft = descActivation.numberOfNeurons;
     descConnectionLast.szRight = 2;
     top.addDescription(descConnectionLast);
 
@@ -137,7 +137,7 @@ Topology Topology::AGI_Topology(){ // Artemy, Grigory, Ivan
     descActivationLast.dropout = 0.0;
     descActivationLast.usesbias = false;
     descActivationLast.activation = NeuronType::Softmax;
-    descActivationLast.numberOfNeurons = 2;
+    descActivationLast.numberOfNeurons = descConnectionLast.szRight;
     top.addDescription(descActivationLast);
 
 
@@ -157,7 +157,7 @@ Topology Topology::AGI_Topology(){ // Artemy, Grigory, Ivan
 Topology Topology::buildConv(){
     Topology top;
 
-    std::vector<size_t> dimInput = {20,20,20,24};
+    std::vector<size_t> dimInput = {20,20,20,28};
 
     InputLayerDescription descInput;
     descInput.dimension = Dimension(dimInput); // todo check Dimension(4,20,20,20,28)
@@ -166,15 +166,15 @@ Topology Topology::buildConv(){
 
 
     ConvolutionLayerDescription descConv;
-    descConv.dimKernel = {5,3,5};
+    descConv.dimKernel = {5,3,3};
     descConv.scatter = {1,1,1};
 
-    descConv.offset = {(descConv.dimKernel[0] -1)/2,(descConv.dimKernel[1] -1)/2,(descConv.dimKernel[2] -1)};
+    descConv.offset = {(descConv.dimKernel[0] -1)/2,(descConv.dimKernel[1] -1)/2,(descConv.dimKernel[2] -1)/2};
     descConv.leftPadding = {PaddingType::Torus, PaddingType::Zerofill, PaddingType::Zerofill};
     descConv.rightPadding = {PaddingType::Torus, PaddingType::Zerofill, PaddingType::Zerofill};
 
     descConv.inChannel = 28;
-    descConv.outChannel = 4;
+    descConv.outChannel = 8;
     descConv.dimInput = {GS_AZIMUT,GS_INCLINATION, GS_MOMENTUM};
     descConv.lower = {0,0,0};
     descConv.upper = {GS_AZIMUT,GS_INCLINATION, GS_MOMENTUM};
@@ -207,7 +207,7 @@ Topology Topology::buildConv(){
     MaxPoolingLayerDescription descPooling;
     descPooling.channel = descConv.outChannel;
     descPooling.dimInput = descConv.dimOutput;
-    descPooling.stride = {4,1,2};
+    descPooling.stride = {2,2,2};
     descPooling.dimOutput = {descPooling.dimInput[0] / descPooling.stride[0],
                              descPooling.dimInput[1] / descPooling.stride[1],
                             descPooling.dimInput[2] / descPooling.stride[2]};
@@ -215,7 +215,7 @@ Topology Topology::buildConv(){
 
 
     FullyConnectedDescription descConnection;
-    descConnection.szLeft = 224000;
+    descConnection.szLeft = descPooling.dimOutput[0]*descPooling.dimOutput[1]*descPooling.dimOutput[2]*descPooling.channel;
     descConnection.szRight = 2;
     top.addDescription(descConnection);
 
@@ -228,7 +228,6 @@ Topology Topology::buildConv(){
 
     OutputLayerDescription descOutput;
     top.addDescription(descOutput);
-
     return top;
 }
 
@@ -246,8 +245,8 @@ Topology Topology::experimentalTopology()
     top.addDescription(descInput);
 
     ConvolutionLayerDescription descConv;
-    descConv.dimKernel = {3,3,5};
-    descConv.offset = {(descConv.dimKernel[1] -1)/2, (descConv.dimKernel[1] -1)/2,(descConv.dimKernel[2] -1)/2};
+    descConv.dimKernel = {5,3,3};
+    descConv.offset = {(descConv.dimKernel[1] -2)/2, (descConv.dimKernel[1] -1)/2,(descConv.dimKernel[2] -1)/2};
     descConv.inChannel = 28;
     descConv.outChannel = 8;
     descConv.dimInput = {GS_MOMENTUM, GS_INCLINATION, GS_AZIMUT};
@@ -423,6 +422,58 @@ Topology Topology::doubleHidden_64_64(){
     return top;
 }
 
+
+Topology Topology::doubleHidden(){
+    Topology top;
+
+    std::vector<size_t> dimInput = {20,20,20,28};
+    InputLayerDescription descInput;
+    descInput.dimension = Dimension(dimInput);
+    descInput.size = descInput.dimension.size();
+    top.addDescription(descInput);
+
+    FullyConnectedDescription descHiddenConnectionA;
+    descHiddenConnectionA.szLeft = 224000;
+    descHiddenConnectionA.szRight = 16;
+    top.addDescription(descHiddenConnectionA);
+
+    ActivationLayerDescription descHiddenActivationA;
+    descHiddenActivationA.dropout = 0.2;
+    descHiddenActivationA.usesbias = true;
+    descHiddenActivationA.activation = NeuronType::LeakyReLU;
+    descHiddenActivationA.numberOfNeurons = descHiddenConnectionA.szRight;
+    top.addDescription(descHiddenActivationA);
+
+    FullyConnectedDescription descHiddenConnectionB;
+    descHiddenConnectionB.szLeft = descHiddenActivationA.numberOfNeurons;
+    descHiddenConnectionB.szRight = 16;
+    top.addDescription(descHiddenConnectionB);
+
+    ActivationLayerDescription descHiddenActivationB;
+    descHiddenActivationB.dropout = 0.2;
+    descHiddenActivationB.usesbias = true;
+    descHiddenActivationB.activation = NeuronType::LeakyReLU;
+    descHiddenActivationB.numberOfNeurons = descHiddenConnectionB.szRight;
+    top.addDescription(descHiddenActivationA);
+
+    FullyConnectedDescription descConnection;
+    descConnection.szLeft = descHiddenActivationB.numberOfNeurons;
+    descConnection.szRight = 2;
+    top.addDescription(descConnection);
+
+    ActivationLayerDescription descActivation;
+    descActivation.dropout = 0.0;
+    descActivation.usesbias = true;
+    descActivation.activation = NeuronType::Softmax;
+    descActivation.numberOfNeurons = 2;
+    top.addDescription(descActivation);
+
+    OutputLayerDescription descOutput;
+    top.addDescription(descOutput);
+    return top;
+}
+
+
 Topology Topology::defaultConvolutional(){
     Topology top;
 
@@ -557,20 +608,96 @@ Topology Topology::getPredefined(size_t index)
             break;
         case 2:
             sDebug() << "0 fc doubleHidden_8_8\n";
-            descTopology = Topology::doubleHidden_64_64();
+            descTopology = Topology::doubleHidden();
             break;
         case 3:
-            sDebug() << "0 fc AGI\n";
+            sDebug() << "0 fc SparseConv\n";
             descTopology = Topology::AGI_Topology();
             break;
         case 4: // CNN
-            sDebug() << "0 fc expected\n";
-            descTopology = Topology::defaultNoneHidden();
+            sDebug() << "0 fc 3_3_3\n";
+            descTopology = Topology::linearSeperable_1();
             break;
         default:
-            sDebug() << "0 fc expected\n";
-            descTopology = Topology::defaultNoneHidden();
+            sDebug() << "0 fc 3_3_3\n";
+            descTopology = Topology::linearSeperable_3();
         break;
 }
     return descTopology;
+}
+Topology Topology::linearSeperable_1()
+{
+    Topology top;
+
+    InputLayerDescription descInput;
+    std::vector<size_t> dimInput = {3,3,3,28}; // todo replace by dimension
+    descInput.dimension = Dimension(dimInput);
+    descInput.size = descInput.dimension.size();
+    top.addDescription(descInput);
+
+
+
+    FullyConnectedDescription descHiddenConnectionA;
+    descHiddenConnectionA.szLeft = 3*3*1*28;
+    descHiddenConnectionA.szRight = 2;
+    top.addDescription(descHiddenConnectionA);
+
+
+    ActivationLayerDescription descOutputActivation;
+    descOutputActivation.dropout = 0.0;
+    descOutputActivation.usesbias = false;
+    descOutputActivation.activation = NeuronType::Softmax;
+    descOutputActivation.numberOfNeurons = descHiddenConnectionA.szRight;
+    top.addDescription(descOutputActivation);
+
+    OutputLayerDescription descOutput;
+    top.addDescription(descOutput);
+
+
+    return top;
+}
+
+
+Topology Topology::linearSeperable_3()
+{
+    Topology top;
+
+    InputLayerDescription descInput;
+    std::vector<size_t> dimInput = {3,3,3,28}; // todo replace by dimension
+    descInput.dimension = Dimension(dimInput);
+    descInput.size = descInput.dimension.size();
+    top.addDescription(descInput);
+
+
+
+    FullyConnectedDescription descHiddenConnectionA;
+    descHiddenConnectionA.szLeft = 3*3*3*28;
+    descHiddenConnectionA.szRight = 3*3*3;
+    top.addDescription(descHiddenConnectionA);
+
+    ActivationLayerDescription descOutputActivationA;
+    descOutputActivationA.dropout = 0.0;
+    descOutputActivationA.usesbias = true;
+    descOutputActivationA.activation = NeuronType::LeakyReLU;
+    descOutputActivationA.numberOfNeurons = descHiddenConnectionA.szRight;
+    top.addDescription(descOutputActivationA);
+
+
+    FullyConnectedDescription descHiddenConnection;
+    descOutputActivationA.numberOfNeurons = descOutputActivationA.numberOfNeurons;
+    descHiddenConnection.szRight = 2;
+    top.addDescription(descHiddenConnection);
+
+    ActivationLayerDescription descOutputActivation;
+    descOutputActivation.dropout = 0.0;
+    descOutputActivation.usesbias = false;
+    descOutputActivation.activation = NeuronType::Softmax;
+    descOutputActivation.numberOfNeurons = descHiddenConnection.szRight;
+    top.addDescription(descOutputActivation);
+
+    OutputLayerDescription descOutput;
+    top.addDescription(descOutput);
+
+
+    return top;
 }

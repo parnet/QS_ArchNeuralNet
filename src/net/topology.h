@@ -38,7 +38,7 @@ public:
 
     static Topology getPredefined(size_t index);
 
-
+    static Topology linearSeperable_3();
 
 
     static Topology AGI_Topology();
@@ -50,6 +50,8 @@ public:
     static Topology doubleHidden_64_64();
 
 
+    static Topology linearSeperable_1();
+    static Topology doubleHidden();
 };
 
 #endif // TOPOLOGY_H

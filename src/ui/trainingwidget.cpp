@@ -47,7 +47,7 @@ TrainingWidget::TrainingWidget(QWidget *parent) :
     ui->bigChart->xAxis->setLabel("NEpoch");
     ui->bigChart->yAxis->setLabel("Efficiency");
     ui->bigChart->xAxis->setRange(0, szEpoch+ 1);
-    ui->bigChart->yAxis->setRange(40, 105);
+    ui->bigChart->yAxis->setRange(minchart, maxchart);
     ui->bigChart->replot();
 
 
@@ -181,7 +181,7 @@ void TrainingWidget::drawHistogram(size_t iEp)
     ui->bigChart->xAxis->setLabel("NEpoch");
     ui->bigChart->yAxis->setLabel("Efficiency");
     ui->bigChart->xAxis->setRange(0, szEpoch + 1);
-    ui->bigChart->yAxis->setRange(40, 105);
+    ui->bigChart->yAxis->setRange(minchart, maxchart);
     ui->bigChart->replot();
 
     QVector<double> xTraining(iEp + 2);

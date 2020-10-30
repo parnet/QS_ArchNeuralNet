@@ -11,14 +11,14 @@
 class SFilter {
 public:
     typedef WeightAdamOptimization KernelUpdater;
-    typedef WeightGradientDescent BiasUpdater;
+    typedef WeightAdamOptimization BiasUpdater;
 public:
     std::vector<KernelUpdater::Variable> kernel;
     BiasUpdater::Variable bias;
     KernelUpdater kernelUpdater;
     BiasUpdater biasUpdater;
     number learningrateKernel = 0.001; // todo move to Updater // todo fix value
-    number learningRateBias = 0.0001; // todo move to Updater
+    number learningRateBias = 0.001; // todo move to Updater
 };
 
 

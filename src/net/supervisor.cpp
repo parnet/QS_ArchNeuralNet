@@ -44,7 +44,7 @@ void Supervisor::training() // todo set module, todo use module for Batch
         std::vector<std::vector<number>> results;
         std::vector<number> loss;
         this->neuralNet->getResults(results,loss);
-
+        size_t bzc = 0;
             for(size_t b = 0 ; b < batch->size; ++b){
 
                 // this->neuralNet->getResults(result);
@@ -54,10 +54,11 @@ void Supervisor::training() // todo set module, todo use module for Batch
                 auto detected = QGPSparseData::getClassification(results[b]);
                 bool good = (detected == batch->data[b].classification);
                 statTotalTraining[curEpoch]++;
-                if (good) { statCorrectTraining[curEpoch]++; }
+                if (good) { statCorrectTraining[curEpoch]++; bzc++; }
                 this->curTraining++;
 
             }
+            // qDebug() << bzc << "\n"; // todo endl
             this->neuralNet->backprop(batch, this->curEpoch);
 
         //qDebug() << "Training " << (statCorrectTraining[curEpoch]) / number(statTotalTraining[curEpoch]) << "\t"
@@ -68,8 +69,7 @@ void Supervisor::training() // todo set module, todo use module for Batch
 
 }
 
-void Supervisor::validate()
-{
+void Supervisor::validate(){
     size_t valsize = 2; // todo
     size_t numval = szValidation / valsize;
 

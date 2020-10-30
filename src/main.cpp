@@ -13,8 +13,9 @@
 
 int devconvert(int argc, char*argv[]){
     Module * module = new Module();
-    //module->fileDimension = Dimension(4,20,20,20,14); // Azimut (-pi, pi) , Inclination ( 0, pi), momentum, particlecount
-    module->filename.path = "M:/sphr_28_20_20_20/";
+    std::vector<size_t> dimInput = {1,3,3,28};
+    module->fileDimension = Dimension(dimInput); // Azimut (-pi, pi) , Inclination ( 0, pi), momentum, particlecount
+    module->filename.path = "M:/sphr_28_3_3_1/";
 
     QGPRawData qgpr{};
     qgpr.nFilesPerClass = 5;
@@ -90,7 +91,8 @@ int main(int argc, char *argv[]) {
     //qInstallMessageHandler(&loggingFile);
     //__test();
     // exit(-1);
-    // devconvert(argc,argv);
+     //devconvert(argc,argv);
+     //exit(-1);
     // devmain(argc, argv);
     // devfc(argc, argv);
 
