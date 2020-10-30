@@ -285,6 +285,13 @@
       </layout>
      </item>
      <item>
+      <widget class="QPushButton" name="btn_exportAccuracy">
+       <property name="text">
+        <string>Export Accuracy Graph (.nnp)</string>
+       </property>
+      </widget>
+     </item>
+     <item>
       <widget class="QCustomPlot" name="smallChart" native="true">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Preferred" vsizetype="Preferred">

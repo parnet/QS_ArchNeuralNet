@@ -594,6 +594,7 @@ Topology Topology::defaultConvolutional(){
     return top;
 }
 
+
 Topology Topology::getPredefined(size_t index)
 {
     Topology descTopology;

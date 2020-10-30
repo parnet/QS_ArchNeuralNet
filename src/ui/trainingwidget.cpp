@@ -41,6 +41,7 @@ TrainingWidget::TrainingWidget(QWidget *parent) :
 
     connect(ui->btn_loadData, SIGNAL(clicked()), this, SLOT(loadDataset()));   //Load QGP and NQGP Data
 
+    connect(ui->btn_exportAccuracy, SIGNAL(clicked()), this, SLOT(exportAccuracyData()));
 
     ui->bigChart->clearGraphs();
     ui->bigChart->addGraph();
