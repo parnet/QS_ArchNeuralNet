@@ -14,8 +14,7 @@ class TrainingWidget : public QWidget
     Q_OBJECT
 
 private:
-
-    int minchart = 80;
+    int minchart = 50;
     int maxchart = 105;
 
     Ui::TrainingWidget *ui;

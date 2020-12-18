@@ -139,7 +139,7 @@ void TrainingWidget::exportAccuracyData(){
 void TrainingWidget::setTopology(int number)
 {
     qDebug() << "using seed (1024);";
-    RandomDevice::setSeed(1024);
+    // RandomDevice::setSeed(1024);
     supervisor->setTopology(Topology::getPredefined(size_t(number)));
 }
 

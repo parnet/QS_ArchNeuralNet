@@ -15,11 +15,11 @@ int devconvert(int argc, char*argv[]){
     Module * module = new Module();
     std::vector<size_t> dimInput = {1,3,3,28};
     module->fileDimension = Dimension(dimInput); // Azimut (-pi, pi) , Inclination ( 0, pi), momentum, particlecount
-    module->filename.path = "M:/sphr_28_3_3_1/";
+    module->filename.path = "E:/NextCloud/Research/ANNBuild/_datasetConverted";
 
     QGPRawData qgpr{};
     qgpr.nFilesPerClass = 5;
-    qgpr.inFilepath = "Q:/QS_NeuralNet/data_raw/31.2/";
+    qgpr.inFilepath = "E:/NextCloud/Research/ANNBuild/dataset_raw";
 
     qgpr.convert(module);
     exit(-20);
@@ -30,7 +30,7 @@ int devmain(int argc, char*argv[]){
     Module * module = new Module();
     std::vector<size_t> dimInput = {20,20,20,28};
     module->fileDimension = Dimension(dimInput);
-    module->filename.path = "M:/sphr_28_20_20_20";
+    module->filename.path = "E:/NextCloud/Research/QS_ArchNeuralNet/datasets/sphr_28_20_20_20";
 
     NeuralNet net = NeuralNet();
     QGPBatch * batch = new QGPSequentialBatch(module);
@@ -87,12 +87,12 @@ int devfc(int argc, char *argv[]){
 
 int main(int argc, char *argv[]) {
     sDebug() << "num of args: " << argc << qSetRealNumberPrecision(2);
-    RandomDevice::setSeed(1024);  // todo delete seed or notice user
+    // RandomDevice::setSeed(1024);  // todo delete seed or notice user
     //qInstallMessageHandler(&loggingFile);
-    //__test();
+    // __test();
     // exit(-1);
-     //devconvert(argc,argv);
-     //exit(-1);
+    // devconvert(argc,argv);
+    // exit(-1);
     // devmain(argc, argv);
     // devfc(argc, argv);
 

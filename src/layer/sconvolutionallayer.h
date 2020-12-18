@@ -7,11 +7,12 @@
 #include <convolutionlayerdescription.h>
 #include <weightadamoptimization.h>
 #include <weightgradientdescent.h>
+#include <weightmomentumofinertia.h>
 
 class SFilter {
 public:
     typedef WeightAdamOptimization KernelUpdater;
-    typedef WeightGradientDescent BiasUpdater;
+    typedef WeightAdamOptimization BiasUpdater;
 public:
     std::vector<KernelUpdater::Variable> kernel;
     BiasUpdater::Variable bias;

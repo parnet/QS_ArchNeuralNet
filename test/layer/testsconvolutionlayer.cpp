@@ -52,7 +52,9 @@ int __TestSConvolutionLayer::all() {
     failed += !cycle_2_dd_dd_1(); // C
     failed += !cycle_2_ds_dd_1(); // C
 
+    std::cout << "Cycle_2_DS_SD_1:" << std::endl;
     failed += !cycle_2_ds_sd_1(); // O
+    std::cout << "Cycle_2_DD_SD_1:" << std::endl;
     failed += !cycle_2_dd_sd_1(); // O
 
     failed += !cycle_2_ds_dd_2(); // C
@@ -60,9 +62,7 @@ int __TestSConvolutionLayer::all() {
 
     failed += !cycle_2_dd_dd_2(); // C
     failed += !cycle_2_dd_sd_2(); // C
-    if (failed != 0) {
-        exit(-1);
-    }
+
     return failed;
 }
 
@@ -207,8 +207,8 @@ bool __TestSConvolutionLayer::cycle_1_dd_sd_1() {
     clayer->prepare();
     clayer->feedforward();
 
-    output->displayLeftErrorSignal(0);
-    output->displayActiveLeftErrorSignal(0);
+    // output->displayLeftErrorSignal(0);
+    // output->displayActiveLeftErrorSignal(0);
 
     bool chkFeedForward = output->controlInput();
     if (!chkFeedForward) { sDebug() << "Feedforward not passed"; }
@@ -270,10 +270,10 @@ bool __TestSConvolutionLayer::cycle_1_ds_dd_1() {
     auto Xfull = makeDense(X, Xmask, 4 * 8 * 1);
     input->setOutput(0, X, Xmask);
 
-    clayer->displayKernel();
-    clayer->displayBias();
-    input->displayOutput(0);
-    input->displayActiveOutput(0);
+//    clayer->displayKernel();
+//    clayer->displayBias();
+//    input->displayOutput(0);
+//    input->displayActiveOutput(0);
 
     output->setExpectedInput(0, {0, -0.013900942245441, -0.011262058319560, 0.020405191376393,
                                  0.017831183075847, 0.173864808523127, -0.055507110190687, -0.011512335946001,
@@ -301,8 +301,8 @@ bool __TestSConvolutionLayer::cycle_1_ds_dd_1() {
     bool chkFeedForward = output->controlInput();
     if (!chkFeedForward) { sDebug() << "Feedforward not passed"; }
 
-    output->displayLeftErrorSignal(0);
-    output->displayActiveLeftErrorSignal(0);
+//    output->displayLeftErrorSignal(0);
+//    output->displayActiveLeftErrorSignal(0);
     clayer->backprop();
 
     bool chkKernelChanges = checkKernel({{1.524524050993934, 1.799336027071535, 0.282533307169485,
@@ -362,10 +362,10 @@ bool __TestSConvolutionLayer::cycle_1_ds_sd_1() {
     auto Xfull = makeDense(X, Xmask, 4 * 8 * 1);
     input->setOutput(0, X, Xmask);
 
-    clayer->displayKernel();
-    clayer->displayBias();
-    input->displayOutput(0);
-    input->displayActiveOutput(0);
+//    clayer->displayKernel();
+//    clayer->displayBias();
+//    input->displayOutput(0);
+//    input->displayActiveOutput(0);
 
     output->setExpectedInput(0, {0, -0.013900942245441, -0.011262058319560, 0.020405191376393,
                                  0.017831183075847, 0.173864808523127, -0.055507110190687, -0.011512335946001,
@@ -398,8 +398,8 @@ bool __TestSConvolutionLayer::cycle_1_ds_sd_1() {
     bool chkFeedForward = output->controlInput();
     if (!chkFeedForward) { sDebug() << "Feedforward not passed"; }
 
-    output->displayLeftErrorSignal(0);
-    output->displayActiveLeftErrorSignal(0);
+//    output->displayLeftErrorSignal(0);
+//    output->displayActiveLeftErrorSignal(0);
     clayer->backprop();
 
     bool chkKernelChanges = checkKernel({{-0.137343903015117, 0.473206292522991, 0.079150450383655,
@@ -459,9 +459,9 @@ bool __TestSConvolutionLayer::cycle_1_dd_dd_2() {
 
     input->setOutput(0, RandomDevice::createUniformVector(4 * 8, -1.0, 1.0), {});
 
-    input->displayOutput(0);
-    clayer->displayBias();
-    clayer->displayKernel();
+//    input->displayOutput(0);
+//    clayer->displayBias();
+//    clayer->displayKernel();
 
 
     output->setExpectedInput(0, {       // Output cannel 1
@@ -498,8 +498,8 @@ bool __TestSConvolutionLayer::cycle_1_dd_dd_2() {
                                       -0.111296922967646, -0.160071580443870, -0.160934795506356, -0.004111182196169},
                                   {});
 
-    output->displayLeftErrorSignal(0);
-    output->displayActiveLeftErrorSignal(0);
+//    output->displayLeftErrorSignal(0);
+//    output->displayActiveLeftErrorSignal(0);
 
     clayer->prepare();
     clayer->feedforward();
@@ -559,13 +559,13 @@ bool __TestSConvolutionLayer::cycle_1_dd_sd_2() {
     output->setLeftVectorSize(4 * 8 * 2);
 
     clayer->init();
-    clayer->displayBias();
-    clayer->displayKernel();
+//    clayer->displayBias();
+//    clayer->displayKernel();
     clayer->prepare();
 
     input->setOutput(0, RandomDevice::createUniformVector(4 * 8, -1.0, 1.0), {});
-    input->displayOutput(0);
-    input->displayActiveOutput(0);
+//    input->displayOutput(0);
+//    input->displayActiveOutput(0);
 
     output->setExpectedInput(0, {       // Output cannel 1
             0.174691458836913, 0.435961600884787, -0.107943057251768, -0.259207117896071,
@@ -592,8 +592,8 @@ bool __TestSConvolutionLayer::cycle_1_dd_sd_2() {
     auto dYpartial = applyMask(dYproto, dYmask);
 
     output->setErrorSignal(0, dYpartial, dYmask);
-    output->displayLeftErrorSignal(0);
-    output->displayActiveLeftErrorSignal(0);
+//    output->displayLeftErrorSignal(0);
+//    output->displayActiveLeftErrorSignal(0);
 
     input->setExpectedErrorSignal(0, {-0.244206335574466, 0.306145988141458, 0.051233518183238, -0.045134607599280,
                                       -0.096174289196094, 0.087521683830480, -0.290200063467504, -0.014320045313033,
@@ -664,8 +664,8 @@ bool __TestSConvolutionLayer::cycle_1_ds_dd_2() {
 
     clayer->init();
     clayer->prepare();
-    clayer->displayKernel();
-    clayer->displayBias();
+//    clayer->displayKernel();
+//    clayer->displayBias();
 
     auto Xflat = RandomDevice::createUniformVector(4 * 8 * descConv.inChannel, -1.0, 1.0);
     auto dYflat = RandomDevice::createUniformVector(4 * 8 * descConv.outChannel, -1.0, 1.0);
@@ -677,8 +677,8 @@ bool __TestSConvolutionLayer::cycle_1_ds_dd_2() {
     //auto dYfull = makeDense(dY, dYmask, 4*8*descConv.outChannel);
 
     input->setOutput(0, X, Xmask);
-    input->displayOutput(0);
-    input->displayActiveOutput(0);
+//    input->displayOutput(0);
+//    input->displayActiveOutput(0);
 
     output->setExpectedInput(0, {  // output channel 1
             -0.088420392534866, -0.089196060538796, 0.227219452592575, 0.145607642197070, 0.193836281042852,
@@ -701,8 +701,8 @@ bool __TestSConvolutionLayer::cycle_1_ds_dd_2() {
 
     output->setErrorSignal(0, dYflat, {});
 
-    output->displayLeftErrorSignal(0);
-    output->displayActiveLeftErrorSignal(0);
+//    output->displayLeftErrorSignal(0);
+//    output->displayActiveLeftErrorSignal(0);
 
     input->setExpectedErrorSignal(0, {
                                       0.194144269776326, 0.069817736462865,-0.039787364244841,-0.031400982800522
@@ -778,8 +778,8 @@ bool __TestSConvolutionLayer::cycle_1_ds_sd_2() {
 
     clayer->init();
     clayer->prepare();
-    clayer->displayKernel();
-    clayer->displayBias();
+//    clayer->displayKernel();
+//    clayer->displayBias();
 
     auto Xflat = RandomDevice::createUniformVector(4 * 8 * descConv.inChannel, -1.0, 1.0);
     auto dYflat = RandomDevice::createUniformVector(4 * 8 * descConv.outChannel, -1.0, 1.0);
@@ -791,8 +791,8 @@ bool __TestSConvolutionLayer::cycle_1_ds_sd_2() {
     auto dYfull = makeDense(dY, dYmask, 4 * 8 * descConv.outChannel);
 
     input->setOutput(0, X, Xmask);
-    input->displayOutput(0);
-    input->displayActiveOutput(0);
+//    input->displayOutput(0);
+//    input->displayActiveOutput(0);
 
     output->setExpectedInput(0, {  // output channel 1
             -0.088420392534866, -0.089196060538796, 0.227219452592575, 0.145607642197070, 0.193836281042852,
@@ -815,8 +815,8 @@ bool __TestSConvolutionLayer::cycle_1_ds_sd_2() {
 
     output->setErrorSignal(0, dY, dYmask);
 
-    output->displayLeftErrorSignal(0);
-    output->displayActiveLeftErrorSignal(0);
+//    output->displayLeftErrorSignal(0);
+//    output->displayActiveLeftErrorSignal(0);
 
     input->setExpectedErrorSignal(0, {
                                       0.284595701398666,   0.078330184276215,   0.217679421026877,  -0.059830521439204,
@@ -891,12 +891,12 @@ bool __TestSConvolutionLayer::cycle_2_dd_dd_2() {
 
     clayer->init();
     clayer->prepare();
-    clayer->displayKernel();
-    clayer->displayBias();
+//    clayer->displayKernel();
+//    clayer->displayBias();
 
     input->setOutput(0, RandomDevice::createUniformVector(4 * 8 * 2, -1.0, 1.0), {});
-    input->displayOutput(0);
-    input->displayActiveOutput(0);
+//    input->displayOutput(0);
+//    input->displayActiveOutput(0);
 
     output->setExpectedInput(0, {  // output channel 1
             -0.083590011955671, 0.523087913299441, -0.103067270885265, -0.029613138204533,
@@ -920,8 +920,8 @@ bool __TestSConvolutionLayer::cycle_2_dd_dd_2() {
     }, {});
 
     output->setErrorSignal(0, RandomDevice::createUniformVector(4 * 8 * 2, -1.0, 1.0), {});
-    output->displayLeftErrorSignal(0);
-    output->displayActiveLeftErrorSignal(0);
+//    output->displayLeftErrorSignal(0);
+//    output->displayActiveLeftErrorSignal(0);
 
     input->setExpectedErrorSignal(0, {0.100788761062986, -0.219794296215658, 0.371206266165810, -0.048317490244575,
                                       -0.141507438698241, -0.243738746527607, 0.610443929793561, -0.140491776628809,
@@ -1007,8 +1007,8 @@ bool __TestSConvolutionLayer::cycle_2_dd_sd_2() {
 
     clayer->init();
     clayer->prepare();
-    clayer->displayKernel();
-    clayer->displayBias();
+//    clayer->displayKernel();
+//    clayer->displayBias();
 
     auto Xflat = RandomDevice::createUniformVector(4 * 8 * descConv.inChannel, -1.0, 1.0);
     //auto Xmask = RandomDevice::createMask(4*8*2, 0.5);
@@ -1016,8 +1016,8 @@ bool __TestSConvolutionLayer::cycle_2_dd_sd_2() {
     //auto Xfull = makeDense(X,Xmask,4*8*2);
 
     input->setOutput(0, Xflat, {});
-    input->displayOutput(0);
-    input->displayActiveOutput(0);
+//    input->displayOutput(0);
+//    input->displayActiveOutput(0);
 
     output->setExpectedInput(0, {  // output channel 1
             -0.083590011955671, 0.523087913299441, -0.103067270885265, -0.029613138204533,
@@ -1047,8 +1047,8 @@ bool __TestSConvolutionLayer::cycle_2_dd_sd_2() {
 
     output->setErrorSignal(0, dY, dYmask);
 
-    output->displayLeftErrorSignal(0);
-    output->displayActiveLeftErrorSignal(0);
+//    output->displayLeftErrorSignal(0);
+//    output->displayActiveLeftErrorSignal(0);
     input->setExpectedErrorSignal(0, {0.266452104247821, 0.351278209584464, -0.503252410225138, 0.248136195380520,
                                       0.060029628623840, -0.313904947488050, -0.083762351207850, 0.070908769333885,
                                       0.065980434458656, -0.025604317048699, 0.076279500330426, -0.047224916731011,
@@ -1137,8 +1137,8 @@ bool __TestSConvolutionLayer::cycle_2_ds_dd_2() {
 
     clayer->init();
     clayer->prepare();
-    clayer->displayKernel();
-    clayer->displayBias();
+//    clayer->displayKernel();
+//    clayer->displayBias();
 
     auto Xflat = RandomDevice::createUniformVector(4 * 8 * descConv.inChannel, -1.0, 1.0);
     auto dYflat = RandomDevice::createUniformVector(4 * 8 * descConv.outChannel, -1.0, 1.0);
@@ -1150,8 +1150,8 @@ bool __TestSConvolutionLayer::cycle_2_ds_dd_2() {
     //auto dYfull = makeDense(dY, dYmask, 4*8*descConv.outChannel);
 
     input->setOutput(0, X, Xmask);
-    input->displayOutput(0);
-    input->displayActiveOutput(0);
+//    input->displayOutput(0);
+//    input->displayActiveOutput(0);
 
     output->setExpectedInput(0, {  // output channel 1
             -0.123288357609995, 0.301980589605635, 0.257515408865661, -0.252964360036999,
@@ -1176,8 +1176,8 @@ bool __TestSConvolutionLayer::cycle_2_ds_dd_2() {
 
     output->setErrorSignal(0, dYflat, {});
 
-    output->displayLeftErrorSignal(0);
-    output->displayActiveLeftErrorSignal(0);
+//    output->displayLeftErrorSignal(0);
+//    output->displayActiveLeftErrorSignal(0);
 
     input->setExpectedErrorSignal(0, {
                                       0.100788761062986,  -0.219794296215658,   0.371206266165810,  -0.048317490244575,
@@ -1270,8 +1270,8 @@ bool __TestSConvolutionLayer::cycle_2_ds_sd_2() { ////// todoooooo o ! oo ! ooo 
 
     clayer->init();
     clayer->prepare();
-    clayer->displayKernel();
-    clayer->displayBias();
+//    clayer->displayKernel();
+//    clayer->displayBias();
 
     auto Xflat = RandomDevice::createUniformVector(4 * 8 * 2, -1.0, 1.0);
     auto dYflat = RandomDevice::createUniformVector(4 * 8 * 2, -1.0, 1.0);
@@ -1283,8 +1283,8 @@ bool __TestSConvolutionLayer::cycle_2_ds_sd_2() { ////// todoooooo o ! oo ! ooo 
     auto dYfull = makeDense(dY, dYmask, 4 * 8 * 2);
 
     input->setOutput(0, X, Xmask);
-    input->displayOutput(0);
-    input->displayActiveOutput(0);
+//    input->displayOutput(0);
+//    input->displayActiveOutput(0);
 
     output->setExpectedInput(0, {  // output channel 1
             -0.123288357609995, 0.301980589605635, 0.257515408865661, -0.252964360036999,
@@ -1309,8 +1309,8 @@ bool __TestSConvolutionLayer::cycle_2_ds_sd_2() { ////// todoooooo o ! oo ! ooo 
 
     output->setErrorSignal(0, dY, dYmask);
 
-    output->displayLeftErrorSignal(0);
-    output->displayActiveLeftErrorSignal(0);
+//    output->displayLeftErrorSignal(0);
+//    output->displayActiveLeftErrorSignal(0);
 
     input->setExpectedErrorSignal(0, {
             0.181838647514085, -0.112519365321052, 0.408281886036690, -0.079657194607206,
@@ -1404,8 +1404,8 @@ bool __TestSConvolutionLayer::cycle_2_dd_dd_1() {
 
     clayer->init();
     clayer->prepare();
-    clayer->displayKernel();
-    clayer->displayBias();
+//    clayer->displayKernel();
+//    clayer->displayBias();
 
     auto Xflat = RandomDevice::createUniformVector(4 * 8 * descConv.inChannel, -1.0, 1.0);
     auto dYflat = RandomDevice::createUniformVector(4 * 8 * descConv.outChannel, -1.0, 1.0);
@@ -1417,8 +1417,8 @@ bool __TestSConvolutionLayer::cycle_2_dd_dd_1() {
     //auto dYfull = makeDense(dY, dYmask, 4*8*descConv.outChannel);
 
     input->setOutput(0, Xflat, {});
-    input->displayOutput(0);
-    input->displayActiveOutput(0);
+//    input->displayOutput(0);
+//    input->displayActiveOutput(0);
 
     output->setExpectedInput(0, {  // output channel 1
             0.240803475596060, 0.934707141905398, -0.150655119514029, -0.288766414574110, -0.324564109224385,
@@ -1432,8 +1432,8 @@ bool __TestSConvolutionLayer::cycle_2_dd_dd_1() {
 
     output->setErrorSignal(0, dYflat, {});
 
-    output->displayLeftErrorSignal(0);
-    output->displayActiveLeftErrorSignal(0);
+//    output->displayLeftErrorSignal(0);
+//    output->displayActiveLeftErrorSignal(0);
 
     input->setExpectedErrorSignal(0, {-0.096054520134699,  -0.029288987357290,   0.340703975038030,   0.003497465613666,
                                       -0.206216523226878,   0.428851691952449,   0.065782164204160,   0.180745885500210,
@@ -1513,8 +1513,8 @@ bool __TestSConvolutionLayer::cycle_2_dd_sd_1() {
 
     clayer->init();
     clayer->prepare();
-    clayer->displayKernel();
-    clayer->displayBias();
+//    clayer->displayKernel();
+//    clayer->displayBias();
 
     auto Xflat = RandomDevice::createUniformVector(4 * 8 * descConv.inChannel, -1.0, 1.0);
     auto dYflat = RandomDevice::createUniformVector(4 * 8 * descConv.outChannel, -1.0, 1.0);
@@ -1526,8 +1526,8 @@ bool __TestSConvolutionLayer::cycle_2_dd_sd_1() {
     auto dYfull = makeDense(dY, dYmask, 4 * 8 * descConv.outChannel);
 
     input->setOutput(0, Xflat, {});
-    input->displayOutput(0);
-    input->displayActiveOutput(0);
+//    input->displayOutput(0);
+//    input->displayActiveOutput(0);
 
     output->setExpectedInput(0, {  // output channel 1
                                    -0.268318940051302,   0.338659012665896,  -0.161921867972628,   0.029724514189631,
@@ -1552,8 +1552,8 @@ bool __TestSConvolutionLayer::cycle_2_dd_sd_1() {
 
     output->setErrorSignal(0, dY, dYmask);
 
-    output->displayLeftErrorSignal(0);
-    output->displayActiveLeftErrorSignal(0);
+//    output->displayLeftErrorSignal(0);
+//    output->displayActiveLeftErrorSignal(0);
 
     input->setExpectedErrorSignal(0, {  -0.268318940051302,   0.338659012665896,  -0.161921867972628,   0.029724514189631,
                                         -0.302631353461289,   0.306230528957212,  -0.207947041391768,   0.024128629652832,
@@ -1638,8 +1638,8 @@ bool __TestSConvolutionLayer::cycle_2_ds_dd_1() {
 
     clayer->init();
     clayer->prepare();
-    clayer->displayKernel();
-    clayer->displayBias();
+//    clayer->displayKernel();
+//    clayer->displayBias();
 
     auto Xflat = RandomDevice::createUniformVector(4 * 8 * descConv.inChannel, -1.0, 1.0);
     auto dYflat = RandomDevice::createUniformVector(4 * 8 * descConv.outChannel, -1.0, 1.0);
@@ -1651,8 +1651,8 @@ bool __TestSConvolutionLayer::cycle_2_ds_dd_1() {
     //auto dYfull = makeDense(dY, dYmask, 4*8*descConv.outChannel);
 
     input->setOutput(0, X, Xmask);
-    input->displayOutput(0);
-    input->displayActiveOutput(0);
+//    input->displayOutput(0);
+//    input->displayActiveOutput(0);
 
     output->setExpectedInput(0, {  // output channel 1
             -0.194628311933751, -0.063598531542797, 0.170390511862326, 0.071969653895974, 0.333795059998075,
@@ -1667,8 +1667,8 @@ bool __TestSConvolutionLayer::cycle_2_ds_dd_1() {
 
     output->setErrorSignal(0, dYflat, {});
 
-    output->displayLeftErrorSignal(0);
-    output->displayActiveLeftErrorSignal(0);
+//    output->displayLeftErrorSignal(0);
+//    output->displayActiveLeftErrorSignal(0);
 
     input->setExpectedErrorSignal(0, {
                                       -0.096054520134699,  -0.029288987357290,   0.340703975038030,   0.003497465613666,
@@ -1753,8 +1753,8 @@ bool __TestSConvolutionLayer::cycle_2_ds_sd_1() {
 
     clayer->init();
     clayer->prepare();
-    clayer->displayKernel();
-    clayer->displayBias();
+//    clayer->displayKernel();
+//    clayer->displayBias();
 
     auto Xflat = RandomDevice::createUniformVector(4 * 8 * descConv.inChannel, -1.0, 1.0);
     auto dYflat = RandomDevice::createUniformVector(4 * 8 * descConv.outChannel, -1.0, 1.0);
@@ -1766,8 +1766,8 @@ bool __TestSConvolutionLayer::cycle_2_ds_sd_1() {
     auto dYfull = makeDense(dY, dYmask, 4 * 8 * descConv.outChannel);
 
     input->setOutput(0, X, Xmask);
-    input->displayOutput(0);
-    input->displayActiveOutput(0);
+//    input->displayOutput(0);
+//    input->displayActiveOutput(0);
 
     output->setExpectedInput(0, {  // output channel 1
             -0.123288357609995, 0.301980589605635, 0.257515408865661, -0.252964360036999,
@@ -1792,8 +1792,8 @@ bool __TestSConvolutionLayer::cycle_2_ds_sd_1() {
 
     output->setErrorSignal(0, dY, dYmask);
 
-    output->displayLeftErrorSignal(0);
-    output->displayActiveLeftErrorSignal(0);
+//    output->displayLeftErrorSignal(0);
+//    output->displayActiveLeftErrorSignal(0);
 
     input->setExpectedErrorSignal(0, {
                                       -0.151554742715751,  -0.205944835642832,   0.506659306248191,   0.004759861677962,

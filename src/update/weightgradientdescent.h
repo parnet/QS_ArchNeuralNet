@@ -13,7 +13,7 @@ public:
     };
 
 
-    number learningRate = 1;
+    number learningRate = 0.01;
 
     WeightGradientDescent() = default;
 

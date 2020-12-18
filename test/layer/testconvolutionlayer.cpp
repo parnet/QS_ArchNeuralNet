@@ -79,15 +79,15 @@ bool __TestConvolutionLayer::prepare(){
     output->setLeftVectorSize(4*8);
 
     clayer->init();
-    clayer->displayBias();
-    clayer->displayKernel();
+//    clayer->displayBias();
+//    clayer->displayKernel();
     clayer->prepare();
 
 
 
 
     input->setOutput(0, RandomDevice::createUniformVector(4*8,-1.0,1.0), {});
-    input->displayOutput(0);
+//    input->displayOutput(0);
 
     output->setExpectedInput(0, {  0.037460516783488, // basing on "formart short" of kernel weights
                                    -0.173609272960799,
@@ -154,7 +154,7 @@ bool __TestConvolutionLayer::prepare(){
                                            0,
                                            0,
                                            0}, {});
-    output->displayLeftErrorSignal(0);
+//    output->displayLeftErrorSignal(0);
 
     input->setExpectedErrorSignal(0, {  -0.134072470663191,  -0.273564021175372,   0.091023028122959,  -0.341579146029962,
                                         -0.161407504624675,  -0.087717719052266,   0.095869004112476,   0.162565929641302,

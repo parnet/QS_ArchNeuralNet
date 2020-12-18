@@ -468,7 +468,7 @@ void SConvolutionalLayer::setRandom(){
             }
         }
     }
-    this->displayKernel();
+    // this->displayKernel();
 }
 
 void SConvolutionalLayer::createIndexmap(ConvolutionLayerDescription desc){

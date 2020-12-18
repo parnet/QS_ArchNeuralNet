@@ -68,7 +68,7 @@ Topology Topology::AGI_Topology(){ // Artemy, Grigory, Ivan
     descPooling.stride = {2,2,2};
     descPooling.dimOutput = {descPooling.dimInput[0] / descPooling.stride[0],
                              descPooling.dimInput[1] / descPooling.stride[1],
-                            descPooling.dimInput[2] / descPooling.stride[2]};
+                             descPooling.dimInput[2] / descPooling.stride[2]};
     top.addDescription(descPooling);
 
 
@@ -609,7 +609,7 @@ Topology Topology::getPredefined(size_t index)
             break;
         case 2:
             sDebug() << "0 fc doubleHidden_8_8\n";
-            descTopology = Topology::doubleHidden();
+            descTopology = Topology::doubleHidden_64_64();
             break;
         case 3:
             sDebug() << "0 fc SparseConv\n";
@@ -617,7 +617,7 @@ Topology Topology::getPredefined(size_t index)
             break;
         case 4: // CNN
             sDebug() << "0 fc 3_3_3\n";
-            descTopology = Topology::linearSeperable_1();
+            descTopology = Topology::defaultConvolutional();
             break;
         default:
             sDebug() << "0 fc 3_3_3\n";

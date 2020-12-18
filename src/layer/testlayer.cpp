@@ -97,6 +97,7 @@ bool TestLayer::controlInput(){
             passed = false;
         }
     }
+    return passed;
 }
 
 bool TestLayer::controlErrorSignal(){
