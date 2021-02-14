@@ -118,26 +118,26 @@ Topology Topology::AGI_Topology(){ // Artemy, Grigory, Ivan
 
     FullyConnectedDescription descConnection;
     descConnection.szLeft = 8000;
-    descConnection.szRight = 64;
+    descConnection.szRight = 2;         // 64
     top.addDescription(descConnection);
 
-    ActivationLayerDescription descActivation;
-    descActivation.dropout = 0.5; // todo dropout of 0.5
-    descActivation.usesbias = true;
-    descActivation.activation = NeuronType::LeakyReLU;
-    descActivation.numberOfNeurons = 64;
-    top.addDescription(descActivation);
+//    ActivationLayerDescription descActivation;
+//    descActivation.dropout = 0.2; // todo dropout of 0.5
+//    descActivation.usesbias = true;
+//    descActivation.activation = NeuronType::LeakyReLU;
+//    descActivation.numberOfNeurons = 64;
+//    top.addDescription(descActivation);
 
-    FullyConnectedDescription descConnectionLast;
-    descConnectionLast.szLeft = descActivation.numberOfNeurons;
-    descConnectionLast.szRight = 2;
-    top.addDescription(descConnectionLast);
+//    FullyConnectedDescription descConnectionLast;
+//    descConnectionLast.szLeft = descActivation.numberOfNeurons;
+//    descConnectionLast.szRight = 2;
+//    top.addDescription(descConnectionLast);
 
     ActivationLayerDescription descActivationLast;
     descActivationLast.dropout = 0.0;
     descActivationLast.usesbias = false;
     descActivationLast.activation = NeuronType::Softmax;
-    descActivationLast.numberOfNeurons = descConnectionLast.szRight;
+    descActivationLast.numberOfNeurons = descConnection.szRight;
     top.addDescription(descActivationLast);
 
 
